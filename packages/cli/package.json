@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "name": "cli",
+  "version": "0.0.1",
+  "description": "the collections of command line tool for goose",
+  "keywords": [
+    "cli"
+  ],
+  "author": "TinkGu <tlwrite@126.com>",
+  "license": "MIT",
+  "dependencies": {
+    "services": "^0.0.1"
+  }
+}

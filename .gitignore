@@ -1,0 +1,8 @@
+.DS_Store
+dist/
+node_modules/
+thumbs.db
+package-lock.json
+lerna-debug.log
+logs/
+db.json
