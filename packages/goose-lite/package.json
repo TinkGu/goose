@@ -1,0 +1,23 @@
+{
+  "name": "goose-lite",
+  "version": "0.0.1",
+  "description": "goose lite",
+  "author": "TinkGu <tlwrite@126.com>",
+  "license": "MIT",
+  "main": "./main",
+  "scripts": {
+    "dev": "NODE_ENV=development electron-forge start",
+    "build": "electron-forge make",
+    "release": "electron-forge publish"
+  },
+  "dependencies": {
+    "menubar": "^5.2.3"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.33",
+    "electron": "^4.1.3"
+  },
+  "config": {
+    "forge": "./forge.config.js"
+  }
+}
