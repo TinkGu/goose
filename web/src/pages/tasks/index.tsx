@@ -56,12 +56,25 @@ export default function PageMarkList() {
       {!!records.length && (
         <div className={cx('results-box')}>
           {records.map((x) => (
-            <TaskItem task={x} key={x.id} />
+            <div className={cx('task-item')} key={x.id}>
+              <TaskItem task={x} />
+            </div>
           ))}
         </div>
       )}
       <div className={cx('results-box')}>
-        <TaskItem task={{} as any} />
+        <div className={cx('task-item')}>
+          <TaskItem task={{} as any} />
+        </div>
+        <div className={cx('task-item')}>
+          <TaskItem task={{} as any} />
+        </div>
+        <div className={cx('task-item')}>
+          <TaskItem task={{} as any} />
+        </div>
+        <div className={cx('task-item')}>
+          <TaskItem task={{} as any} />
+        </div>
       </div>
 
       {/* 底部悬浮导航栏 */}

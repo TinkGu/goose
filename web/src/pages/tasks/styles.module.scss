@@ -137,27 +137,12 @@
 
 .results-box {
   position: relative;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 10px;
-  background: #fff;
+  padding: 10px;
 
-  .active-tags {
-    margin-top: 2px;
-    flex: 1;
-  }
-
-  .clear-tags {
-    flex-shrink: 0;
-    position: relative;
-    top: -1px;
-    width: 20px;
-    height: 20px;
-    opacity: 0.3;
-    cursor: pointer;
-    &:active {
-      opacity: 0.5;
-    }
+  .task-item {
+    display: inline-block;
+    width: calc(50% - 8px);
+    margin: 8px 4px;
   }
 }
 

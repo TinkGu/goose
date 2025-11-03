@@ -1,4 +1,5 @@
 import { useDebounceFn } from '@tinks/xeno/react';
+import { IconCorrect } from 'app/components/icons';
 import classnames from 'classnames/bind';
 import { Task } from '../state';
 import styles from './styles.module.scss';
@@ -30,9 +31,13 @@ export function TaskItem({}: { task: Task }) {
 
   return (
     <div className={cx('task-item')} onClick={handleClick}>
-      <div className={cx('')}></div>
+      <div className={cx('days')}>
+        <span className={cx('g-tag', 'yellow', 'active')}>117天</span>
+      </div>
+      <div className={cx('todo-mark', 'active')}>
+        <IconCorrect className={cx('icon')} color="#009929" />
+      </div>
       <div className={cx('left')}>
-        <div className={cx('days', getNumCls(77))}>77</div>
         <div className={cx('icon')}>🤔</div>
       </div>
       <div className={cx('main')}>
