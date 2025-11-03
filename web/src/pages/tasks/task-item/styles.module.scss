@@ -1,0 +1,21 @@
+.task-item {
+  display: flex;
+  padding: 10px;
+  border-radius: 4px;
+
+  .left {
+    margin-right: 10px;
+    .days {
+      text-align: center;
+      font-size: 16;
+      font-weight: 800;
+      font-family: 'Robot';
+    }
+    .icon {
+      font-size: 40px;
+    }
+  }
+
+  .main {
+  }
+}
