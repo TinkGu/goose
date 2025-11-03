@@ -1,0 +1,14 @@
+{
+  "name": "Goose",
+  "short_name": "Goose",
+  "description": "Goose",
+  "start_url": "/goose/",
+  "display": "standalone",
+  "lang": "zh-CN",
+  "scope": "/goose/",
+  "icons": [
+    { "src": "icons-48.png", "sizes": "48x48" },
+    { "src": "icons-144.png", "sizes": "72x72 96x96 128x128 144x144", "purpose": "maskable" },
+    { "src": "icons-512.png", "sizes": "152x152 192x192 256x256 384x384 512x512", "purpose": "maskable" }
+  ]
+}
