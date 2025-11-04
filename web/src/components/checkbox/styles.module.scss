@@ -1,0 +1,21 @@
+.checkbox {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  background: #fafafa;
+  border-radius: 2px;
+  border: solid 1px #cfcfcf;
+
+  .icon {
+    display: none;
+  }
+
+  &.active {
+    background-color: rgba(218, 246, 234);
+    border-color: #009929;
+
+    .icon {
+      display: block;
+    }
+  }
+}

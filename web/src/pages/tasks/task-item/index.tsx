@@ -1,5 +1,5 @@
 import { useDebounceFn } from '@tinks/xeno/react';
-import { IconCorrect } from 'app/components/icons';
+import { Checkbox } from 'app/components/checkbox';
 import classnames from 'classnames/bind';
 import { openDakaSheet } from '../daka-sheet';
 import { checkDone, Task } from '../state';
@@ -18,9 +18,7 @@ export function TaskItem({ task }: { task: Task }) {
       <div className={cx('days')}>
         <span className={cx('g-tag', 'yellow', 'active')}>{task.dakas} 天</span>
       </div>
-      <div className={cx('todo-mark', { active: isDone })}>
-        <IconCorrect className={cx('icon')} color="#009929" />
-      </div>
+      <Checkbox checked={isDone} className={cx('todo-mark')} />
       <div className={cx('left')}>
         <div className={cx('icon')}>{task.icon}</div>
       </div>
