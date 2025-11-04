@@ -1,7 +1,7 @@
-.g-toast-wrapper {
+.mg-toast-wrapper {
   position: fixed;
 }
-.g-popup .g-toast {
+.mg-popup .mg-toast {
   box-sizing: border-box;
   padding: 8px 16px;
   max-width: 260px;
@@ -14,11 +14,13 @@
   text-align: center;
   word-break: break-all;
 
-  &-top {
-    top: 30%;
+  &.mg-toast-top {
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
-  &-msg-nowrap {
+  .mg-toast-msg-nowrap {
     margin: 0;
     padding: 0;
     white-space: nowrap;

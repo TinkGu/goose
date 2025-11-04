@@ -1,0 +1,61 @@
+@keyframes circle-rorate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes circle-dash {
+  // 以 r = 15, 94 为周长计算
+  $cr: 94;
+  0% {
+    stroke-dasharray: 1, 2 * $cr;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 0.9 * $cr, 2 * $cr;
+    stroke-dashoffset: -(0.4 * $cr);
+  }
+  100% {
+    stroke-dasharray: 0.9 * $cr, 2 * $cr;
+    stroke-dashoffset: -($cr);
+  }
+}
+
+// 圆周长的
+.mg-circle-loading {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  line-height: 1;
+  &.small {
+    width: 16px;
+    height: 16px;
+  }
+  &.large {
+    width: 40px;
+    height: 40px;
+  }
+  &.light {
+    .mg-circle-loading-c {
+      stroke: #ccc;
+    }
+  }
+}
+
+.mg-circle-loading-svg {
+  width: 100%;
+  height: 100%;
+  animation: circle-rorate 1.5s linear infinite;
+
+  .mg-circle-loading-c {
+    stroke: #999;
+    stroke-width: 2;
+    fill: transparent;
+
+    &:local {
+      animation: circle-dash 1.5s linear infinite;
+    }
+  }
+}

@@ -2,9 +2,9 @@ import React from 'react';
 import { getErrorMsg } from '@tinks/xeno';
 import cx from 'classnames';
 import { Popup } from '../popup';
-import './styles.scss';
+import './styles.css';
 
-const prefix = 'g-toast';
+const prefix = 'mg-toast';
 let lastCleaner: (() => void) | null;
 let lastTimer: NodeJS.Timeout;
 
@@ -15,7 +15,7 @@ export interface ToastProps {
    */
   message: string | string[] | React.ReactNode;
   /**
-   * 持续显示时间，毫秒，
+   * 持续显示时间，毫秒
    * @default 3000
    */
   wait?: number;
@@ -30,10 +30,10 @@ export interface ToastProps {
    */
   position?: 'top' | 'center';
   /**
-   * 是否自动换行，默认换行
-   * @default true
+   * 是否禁止自动换行
+   * @default false
    */
-  autoBreakLine?: boolean;
+  nowrap?: boolean;
 }
 
 const clearToast = () => {
@@ -48,12 +48,13 @@ const clearToast = () => {
 
 /**
  * 通用 toast 组件
- * 默认换行，如果设置 message 不换行，可以通过设置 `autoBreakLine=false`；如果多条 message 多行展示，请传入数组
+ * 默认换行，如果设置 message 不换行，可以通过设置 `nowrap`；如果多条 message 多行展示，请传入数组
  */
-export function toast({ message, wait = 3000, mask = false, position = 'center', autoBreakLine = true }: ToastProps) {
+export function toast({ message, wait = 3000, mask = false, position = 'center', nowrap }: ToastProps) {
   clearToast();
-  const msgCls = autoBreakLine ? '' : `${prefix}-msg-nowrap`;
+  const msgCls = nowrap ? `${prefix}-msg-nowrap` : '';
   const destroy = Popup.show({
+    position,
     mask,
     nonePointerEvents: true,
     wrapperClassName: `${prefix}-wrapper`,
