@@ -1,48 +1,32 @@
 import { useDebounceFn } from '@tinks/xeno/react';
 import { IconCorrect } from 'app/components/icons';
 import classnames from 'classnames/bind';
-import { Task } from '../state';
+import { openDakaSheet } from '../daka-sheet';
+import { checkDone, Task } from '../state';
 import styles from './styles.module.scss';
 
 const cx = classnames.bind(styles);
 
-function ActionSheet({}) {
-  return (
-    <div className={cx('action-sheet')}>
-      <div className={cx()}></div>
-    </div>
-  );
-}
-
-const getNumCls = (x: number) => {
-  if (x < 10) {
-    return 'lg';
-  }
-  if (x >= 100) {
-    return 'sm';
-  }
-  return '';
-};
-
-export function TaskItem({}: { task: Task }) {
+export function TaskItem({ task }: { task: Task }) {
+  const isDone = checkDone(task);
   const handleClick = useDebounceFn(() => {
-    // TODO:
+    openDakaSheet(task);
   });
 
   return (
     <div className={cx('task-item')} onClick={handleClick}>
       <div className={cx('days')}>
-        <span className={cx('g-tag', 'yellow', 'active')}>117天</span>
+        <span className={cx('g-tag', 'yellow', 'active')}>{task.dakas} 天</span>
       </div>
-      <div className={cx('todo-mark', 'active')}>
+      <div className={cx('todo-mark', { active: isDone })}>
         <IconCorrect className={cx('icon')} color="#009929" />
       </div>
       <div className={cx('left')}>
-        <div className={cx('icon')}>🤔</div>
+        <div className={cx('icon')}>{task.icon}</div>
       </div>
       <div className={cx('main')}>
         <div className={cx('content')}>
-          <div className={cx('title')}>打卡名</div>
+          <div className={cx('title')}>{task.title}</div>
           <div className={cx('stats')}></div>
         </div>
         <div className={cx('progress')}></div>

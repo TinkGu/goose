@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useDebounceFn } from '@tinks/xeno/react';
-import { IconAdd, IconAll, IconLoop } from 'app/components/icons';
+import { IconAdd, IconAll } from 'app/components/icons';
 import classnames from 'classnames/bind';
 import { useAtomView } from 'use-atom-view';
 import SiteIcon from '../../../public/icons-48.png';
 import { showSettings } from '../settings';
 import { db, Task } from './state';
+import { addTask } from './task-editor';
 import { TaskItem } from './task-item';
 import styles from './styles.module.scss';
 
@@ -14,7 +15,6 @@ const cx = classnames.bind(styles);
 export default function PageMarkList() {
   const { items, score } = useAtomView(db.atom);
   const [records, setRecords] = useState<Task[]>([]);
-  const [todoCount, setTodoCount] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export default function PageMarkList() {
   }, []);
 
   const handleAddTask = useDebounceFn(() => {
-    // TODO:
+    addTask();
   });
 
   return (
@@ -49,6 +49,9 @@ export default function PageMarkList() {
             <div className={cx('btn', 'icon')} onClick={handleAddTask}>
               <IconAdd />
             </div>
+            <div className={cx('btn', 'icon')} onClick={showSettings}>
+              <IconAll />
+            </div>
           </div>
         </div>
       </div>
@@ -62,23 +65,9 @@ export default function PageMarkList() {
           ))}
         </div>
       )}
-      <div className={cx('results-box')}>
-        <div className={cx('task-item')}>
-          <TaskItem task={{} as any} />
-        </div>
-        <div className={cx('task-item')}>
-          <TaskItem task={{} as any} />
-        </div>
-        <div className={cx('task-item')}>
-          <TaskItem task={{} as any} />
-        </div>
-        <div className={cx('task-item')}>
-          <TaskItem task={{} as any} />
-        </div>
-      </div>
 
       {/* 底部悬浮导航栏 */}
-      <div className={cx('bottom-nav')}>
+      {/* <div className={cx('bottom-nav')}>
         <div className={cx('nav-item')}>
           <div className={cx('nav-icon')}>
             <IconLoop />
@@ -90,7 +79,7 @@ export default function PageMarkList() {
             <IconAll />
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

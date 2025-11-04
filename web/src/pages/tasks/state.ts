@@ -1,9 +1,9 @@
 import { JsonDb } from 'app/utils/json-service';
-import { localStore } from 'app/utils/localstorage';
+import dayjs from 'dayjs';
 import { Atom } from 'use-atom-view';
 
-enum TaskStatus {
-  doing,
+export enum TaskStatus {
+  doing = 1,
   paused,
 }
 
@@ -16,6 +16,8 @@ export interface Task {
   status: TaskStatus;
   createdAt: number;
   closedAt: number;
+  // 上次打卡时间
+  lastDakaAt: number;
   // 总打卡次数
   dakas: number;
   // 持续打卡天数
@@ -28,8 +30,6 @@ export interface Task {
 
 // 一次记录
 export interface Daka {
-  id: number;
-  taskId: number;
   desc?: string;
   score: number;
   createdAt: number;
@@ -77,3 +77,11 @@ export const db = new JsonDb({
 db.subscribe(() => {
   // TODO:
 });
+
+// 判断是否是今天打卡的
+export function checkDone(task: Task) {
+  if (!task.lastDakaAt) {
+    return false;
+  }
+  return dayjs(task.lastDakaAt).isSame(dayjs(), 'day');
+}

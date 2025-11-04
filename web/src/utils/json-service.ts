@@ -67,6 +67,33 @@ async function postGitFile({ repo, path, content }: { repo: string; path: string
   }
 }
 
+export async function createGitFile({ repo, path, content }: { repo: string; path: string; content: any }) {
+  const token = getGithubToken();
+  if (!token) return;
+  if (content && typeof content !== 'object') {
+    throw { message: 'content 必须是一个 JSON 安全的对象' };
+  }
+  const jsonString = JSON.stringify(content, null, 2);
+  const apiUrl = `https://api.github.com/repos/${repo}/contents/${path}.json`;
+  // 更新文件
+  const res = await axios.put(
+    apiUrl,
+    {
+      message: 'create',
+      // content: Buff.from(jsonString).toString('base64'),
+      content: window.btoa(String.fromCharCode(...new TextEncoder().encode(jsonString))),
+    },
+    {
+      headers: {
+        Authorization: `token ${token}`,
+      },
+    },
+  );
+  if (res?.data?.content?.sha) {
+    setSHA({ repo, path, sha: res.data.content.sha });
+  }
+}
+
 export class JsonDb<T> {
   atom: Atom<T>;
   repo: string;

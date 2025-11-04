@@ -1,0 +1,128 @@
+.task-editor-modal {
+  :global(.mg-modal-body) {
+    padding: 0;
+  }
+  :global(.mg-modal-wrapper) {
+    overflow-y: unset;
+  }
+}
+
+.modal {
+  color: #333;
+  text-align: left;
+}
+
+.task-editor {
+  width: 100%;
+  padding: 10px 16px;
+  padding-bottom: 0;
+  min-height: 70vh;
+  text-align: left;
+
+  .emoji-input {
+    position: absolute;
+    top: -25px;
+    left: 16px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 36px;
+    cursor: pointer;
+    &.empty {
+      top: -20px;
+      background: #ebebeb;
+      border-radius: 50%;
+      color: #aaa;
+      font-size: 24px;
+      &::after {
+        content: '+';
+      }
+    }
+  }
+
+  .editor-actions {
+    display: flex;
+    justify-content: space-between;
+
+    .btn {
+      display: inline-block;
+      margin-right: 20px;
+      font-size: 13px;
+      color: #333;
+      cursor: pointer;
+
+      &:last-of-type {
+        margin: 0;
+      }
+
+      .close-icon {
+        width: 20px;
+        height: 20px;
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .title-input {
+    :global {
+      .g-input-style {
+        font-size: 18px;
+      }
+    }
+  }
+
+  .desc-input {
+    font-size: 15px;
+  }
+
+  .actions {
+    position: relative;
+    display: flex;
+    margin-top: 4px;
+    width: 100%;
+  }
+
+  .save-btn {
+    position: absolute;
+    bottom: 0;
+    margin: 10px 0;
+    width: calc(100% - 32px);
+  }
+}
+
+.more-menu-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.5);
+
+  .mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .more-menu {
+    position: absolute;
+    top: 40px;
+    right: 16px;
+    background: #fff;
+    border-radius: 8px;
+    .menu-item {
+      margin: 16px 0;
+      width: 80px;
+      text-align: center;
+      font-size: 16px;
+      color: #444;
+      cursor: pointer;
+      &:hover {
+        background: #f0f0f0;
+      }
+    }
+  }
+}

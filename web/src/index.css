@@ -146,3 +146,15 @@ body {
     display: none;
   }
 }
+
+.g-btn {
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #333;
+  outline: none;
+  transition: background-color 0.3s;
+  cursor: pointer;
+  text-align: center;
+}
