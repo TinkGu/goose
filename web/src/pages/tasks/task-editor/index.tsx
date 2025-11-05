@@ -3,9 +3,10 @@ import { trim } from '@tinks/xeno';
 import { useDebounceFn } from '@tinks/xeno/react';
 import { Modal, Portal, toast } from 'app/components';
 import { openEmojiPicker } from 'app/components/emoji-picker';
-import { IconCross } from 'app/components/icons';
+import { IconAdd, IconCross, IconFlag } from 'app/components/icons';
 import classnames from 'classnames/bind';
-import { db, Task, TaskStatus } from '../state';
+import { MilestoneItem, openMilestoneEditor } from '../milestone';
+import { db, Milestone, Task, TaskStatus } from '../state';
 import styles from './styles.module.scss';
 
 const cx = classnames.bind(styles);
@@ -135,6 +136,9 @@ function checkTask(value: Partial<Task>) {
   if (!value.title) {
     throw new Error('请输入标题');
   }
+  if (!value.icon) {
+    throw new Error('请选择图标');
+  }
   return {
     ...(value as Task),
     desc: value.desc || '',
@@ -147,6 +151,7 @@ function TaskEditor({ value, onSave, onDestory }: { value?: Task; onSave: (x: Ta
   const nameRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLTextAreaElement>(null);
   const [icon, setIcon] = useState<string>('');
+  const [milestones, setMilestones] = useState<Milestone[]>([]);
 
   const handleSave = useDebounceFn(async () => {
     try {
@@ -158,6 +163,7 @@ function TaskEditor({ value, onSave, onDestory }: { value?: Task; onSave: (x: Ta
         title,
         desc,
         icon,
+        milestones,
       });
       await onSave(task);
       onDestory();
@@ -182,6 +188,28 @@ function TaskEditor({ value, onSave, onDestory }: { value?: Task; onSave: (x: Ta
     });
   });
 
+  const handleAddMilestone = useDebounceFn(() => {
+    openMilestoneEditor({
+      onSave: (ms: Milestone) => {
+        setMilestones([...milestones, ms]);
+      },
+    });
+  });
+
+  const handleEditMilestone = useDebounceFn((ms: Milestone) => {
+    var index = milestones.findIndex((x) => x === ms);
+    openMilestoneEditor({
+      milestone: ms,
+      onSave: (ms: Milestone) => {
+        milestones[index] = ms;
+        setMilestones([...milestones]);
+      },
+      onDelete: () => {
+        setMilestones((list) => list.filter((x) => x !== ms));
+      },
+    });
+  });
+
   useEffect(() => {
     if (!value) return;
     if (value.title) {
@@ -193,6 +221,9 @@ function TaskEditor({ value, onSave, onDestory }: { value?: Task; onSave: (x: Ta
     }
     if (value.icon) {
       setIcon(value.icon);
+    }
+    if (value.milestones) {
+      setMilestones(value.milestones);
     }
   }, [value]);
 
@@ -217,8 +248,26 @@ function TaskEditor({ value, onSave, onDestory }: { value?: Task; onSave: (x: Ta
         onInput={adjustHeight}
         rows={1}
       />
-      <div className={cx('actions')}>
-        <div className={cx('task-time')}>11/12</div>
+      {/* <div className={cx('section', 'cycle-editor')}>
+        <div className={cx('section-title')}>周期任务</div>
+        <div className={cx('')}>自动生成月度挑战</div>
+        <div className={cx('')}>
+          每周仅需完成 <input type="number" className={cx('g-input-style', 'transparent')} placeholder="填入" /> 次
+        </div>
+      </div> */}
+      <div className={cx('section', 'milestone-area')}>
+        <div className={cx('section-title')}>
+          <div className={cx('label')}>
+            <IconFlag className={cx('flag-icon')} color="#999" />
+            里程碑
+          </div>
+          <div className={cx('add-btn')} onClick={handleAddMilestone}>
+            <IconAdd className={cx('plus-icon')} color="#333" />
+          </div>
+        </div>
+        {milestones.map((ms) => (
+          <MilestoneItem key={ms.createdAt} value={ms} onClick={handleEditMilestone} />
+        ))}
       </div>
       <div className={cx('g-btn', 'save-btn')} onClick={handleSave}>
         保存

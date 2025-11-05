@@ -35,13 +35,12 @@ export function IconSearch({ className }: { className?: string }) {
   );
 }
 
-export function IconCross({ className }: { className?: string }) {
+export function IconCross({ className, color = '#000' }: { className?: string; color?: string }) {
   return (
     <svg className={cx('icon', className)} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1821">
       <path
         d="M512 85.333333c235.637333 0 426.666667 191.029333 426.666667 426.666667S747.637333 938.666667 512 938.666667 85.333333 747.637333 85.333333 512 276.362667 85.333333 512 85.333333z m-86.474667 296.96a30.570667 30.570667 0 1 0-43.232 43.232L468.768 512l-86.474667 86.474667a30.570667 30.570667 0 1 0 43.232 43.232L512 555.232l86.474667 86.474667a30.570667 30.570667 0 1 0 43.232-43.232L555.232 512l86.474667-86.474667a30.570667 30.570667 0 1 0-43.232-43.232L512 468.768z"
-        fill="#000000"
-        p-id="1822"
+        fill={color}
       ></path>
     </svg>
   );
@@ -185,6 +184,18 @@ export function IconClear({ className }: { className?: string }) {
   );
 }
 
+export function IconTrash({ className, color = '#4a4a4a' }: { className?: string; color?: string }) {
+  return (
+    <svg className={cx('icon', className)} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9 10V44H39V10H9Z" fill="none" stroke={color} strokeWidth="4" strokeLinejoin="round" />
+      <path d="M20 20V33" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M28 20V33" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M4 10H44" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M16 10L19.289 4H28.7771L32 10H16Z" fill="none" stroke={color} strokeWidth="4" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function IconFocus({ className }: { className?: string }) {
   return (
     <svg className={cx('icon', className)} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -230,18 +241,18 @@ export function IconArrow({
   );
 }
 
-export function IconAdd({ className }: { className?: string }) {
+export function IconAdd({ className, color = '#4a4a4a' }: { className?: string; color?: string }) {
   return (
     <svg className={cx('icon', className)} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z"
         fill="none"
-        stroke="#4a4a4a"
+        stroke={color}
         strokeWidth="4"
         strokeLinejoin="round"
       />
-      <path d="M24 16V32" stroke="#4a4a4a" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M16 24L32 24" stroke="#4a4a4a" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M24 16V32" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M16 24L32 24" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -387,6 +398,37 @@ export function IconMoreCircle({ className, color = '#333' }: { className?: stri
       <circle cx="14" cy="24" r="3" fill={color} />
       <circle cx="24" cy="24" r="3" fill={color} />
       <circle cx="34" cy="24" r="3" fill={color} />
+    </svg>
+  );
+}
+
+export function IconFlag({ className, color = '#333' }: { className?: string; color?: string }) {
+  return (
+    <svg className={cx('icon', className)} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 44H12H16" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12 44V4" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M40 6H12V22H40L36 14L40 6Z" fill="none" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function IconTime({ className, color = '#333' }: { className?: string; color?: string }) {
+  return (
+    <svg className={cx('icon', className)} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z"
+        fill="none"
+        stroke={color}
+        strokeWidth="4"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M24.0084 12.0001L24.0072 24.0089L32.4866 32.4883"
+        stroke={color}
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }

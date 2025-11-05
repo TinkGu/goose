@@ -126,3 +126,29 @@
     }
   }
 }
+
+.milestone-area {
+  .section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .label {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #333;
+  }
+
+  .flag-icon {
+    margin-right: 4px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .plus-icon {
+    width: 18px;
+    height: 18px;
+  }
+}

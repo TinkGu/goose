@@ -16,16 +16,15 @@ export interface Task {
   status: TaskStatus;
   createdAt: number;
   closedAt: number;
-  // 上次打卡时间
-  lastDakaAt: number;
-  // 总打卡次数
-  dakas: number;
-  // 持续打卡天数
-  keeps: number;
-  // 执行一次，大概需要多少时间。0 表示不统计时间
-  avg_time: number;
-  // 收获的总分数
-  scores: number;
+  lastDakaAt: number; // 上次打卡时间
+  dakas: number; // 总打卡次数
+  keeps: number; // 持续打卡天数
+  avg_time: number; // 执行一次，大概需要多少时间。0 表示不统计时间
+  scores: number; // 收获的总分数
+  weeks: number[]; // 每周打卡的标记
+  isCycle: boolean; // 是否是周期任务
+  weekMin: number; // 每周最少做几次
+  milestones: Milestone[]; // 里程碑
 }
 
 // 一次记录
@@ -42,7 +41,7 @@ export interface Award {
 }
 
 // 里程碑实现方式
-enum MeetBy {
+export enum MeetBy {
   custom,
   daka_times,
   keep_times,
@@ -53,16 +52,18 @@ export interface Milestone {
   id: number;
   taskId: number;
   title: string;
-  desc?: string;
-  // 期望完成时间
-  expectedAt?: number;
-  // 实际完成时间
-  doneAt?: number;
-  // 是否完成
-  isDone: boolean;
+  createdAt: number;
+  expectedAt?: number; // 期望完成时间
+  doneAt?: number; // 实际完成时间
+  isDone: boolean; // 是否完成
   meetBy: MeetBy;
-  // 需要满足的值
-  needValue?: number;
+  meetValue?: number; // 需要满足的值
+  award?: Award; // 奖励
+}
+
+export interface Award {
+  title: string;
+  score: number;
 }
 
 export const db = new JsonDb({
