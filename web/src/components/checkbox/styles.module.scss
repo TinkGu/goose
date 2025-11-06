@@ -11,9 +11,43 @@
   }
 
   &.active {
-    background-color: rgba(218, 246, 234);
-    border-color: #009929;
+    &.red {
+      background-color: hsl(0, 100%, 90%);
+      border-color: hsl(0, 100%, 30%);
+    }
 
+    &.blue {
+      background-color: hsl(212, 100%, 90%);
+      border-color: hsl(212, 100%, 30%);
+    }
+    &.green {
+      background-color: hsl(154, 61%, 91%);
+      border-color: hsl(136, 100%, 30%);
+    }
+
+    &.yellow {
+      background-color: hsl(45, 100%, 90%);
+      border-color: hsl(45, 100%, 30%);
+    }
+
+    &.purple {
+      background-color: hsl(270, 100%, 90%);
+      border-color: hsl(270, 100%, 30%);
+    }
+
+    &.purples {
+      border-color: #454ce1;
+      background-color: rgba(100, 108, 255, 0.08);
+    }
+
+    &.grass {
+      background-color: rgba(232, 247, 207);
+      border-color: rgba(42, 66, 0);
+    }
+    &.black {
+      border-color: #333;
+      background-color: #333;
+    }
     .icon {
       display: block;
     }

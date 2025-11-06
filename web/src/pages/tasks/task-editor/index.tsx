@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { trim } from '@tinks/xeno';
 import { useDebounceFn } from '@tinks/xeno/react';
 import { Modal, Portal, toast } from 'app/components';
+import { Checkbox } from 'app/components/checkbox';
 import { openEmojiPicker } from 'app/components/emoji-picker';
-import { IconAdd, IconCross, IconFlag } from 'app/components/icons';
+import { IconCross, IconFlag, IconLoop } from 'app/components/icons';
 import classnames from 'classnames/bind';
 import { MilestoneItem, openMilestoneEditor } from '../milestone';
 import { db, Milestone, Task, TaskStatus } from '../state';
@@ -143,13 +144,15 @@ function checkTask(value: Partial<Task>) {
     ...(value as Task),
     desc: value.desc || '',
     icon: value.icon || '',
-    avg_time: value.avg_time || 0,
+    avgTime: value.avgTime || 0,
   } as Task;
 }
 
 function TaskEditor({ value, onSave, onDestory }: { value?: Task; onSave: (x: Task) => void; onDestory: () => void }) {
   const nameRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLTextAreaElement>(null);
+  const weekMinTimesRef = useRef<HTMLInputElement>(null);
+  const [isCycle, setIsCycle] = useState<boolean>(false);
   const [icon, setIcon] = useState<string>('');
   const [milestones, setMilestones] = useState<Milestone[]>([]);
 
@@ -157,6 +160,7 @@ function TaskEditor({ value, onSave, onDestory }: { value?: Task; onSave: (x: Ta
     try {
       const title = trim(nameRef.current?.value || '');
       const desc = trim(descRef.current?.value || '');
+      const weekMinTimes = weekMinTimesRef.current?.value ? parseInt(weekMinTimesRef.current?.value) : 0;
 
       const task = checkTask({
         ...(value || {}),
@@ -164,6 +168,8 @@ function TaskEditor({ value, onSave, onDestory }: { value?: Task; onSave: (x: Ta
         desc,
         icon,
         milestones,
+        isCycle,
+        weekMinTimes,
       });
       await onSave(task);
       onDestory();
@@ -225,6 +231,12 @@ function TaskEditor({ value, onSave, onDestory }: { value?: Task; onSave: (x: Ta
     if (value.milestones) {
       setMilestones(value.milestones);
     }
+    if (value.isCycle) {
+      setIsCycle(value.isCycle);
+    }
+    if (value.weekMinTimes) {
+      weekMinTimesRef.current!.value = value.weekMinTimes.toString();
+    }
   }, [value]);
 
   return (
@@ -248,21 +260,33 @@ function TaskEditor({ value, onSave, onDestory }: { value?: Task; onSave: (x: Ta
         onInput={adjustHeight}
         rows={1}
       />
-      {/* <div className={cx('section', 'cycle-editor')}>
-        <div className={cx('section-title')}>周期任务</div>
-        <div className={cx('')}>自动生成月度挑战</div>
-        <div className={cx('')}>
-          每周仅需完成 <input type="number" className={cx('g-input-style', 'transparent')} placeholder="填入" /> 次
+      <div className={cx('section')}>
+        <div className={cx('section-title')}>
+          <div className={cx('label')}>
+            <IconLoop className={cx('label-icon')} color="#666" />
+            周期挑战
+          </div>
         </div>
-      </div> */}
+        <div className={cx('cycle-editor')}>
+          <div className={cx('input-row', 'cycle-checkbox')}>
+            <Checkbox className={cx('checkbox')} checked={isCycle} color="black" onChange={setIsCycle} />
+            自动生成月度挑战
+          </div>
+          <div className={cx('input-row')}>
+            每周仅需完成
+            <input ref={weekMinTimesRef} type="number" className={cx('g-input-style', 'transparent', 'weekmin-input')} placeholder="输入" />
+            次
+          </div>
+        </div>
+      </div>
       <div className={cx('section', 'milestone-area')}>
         <div className={cx('section-title')}>
           <div className={cx('label')}>
-            <IconFlag className={cx('flag-icon')} color="#999" />
+            <IconFlag className={cx('label-icon')} color="#666" />
             里程碑
           </div>
           <div className={cx('add-btn')} onClick={handleAddMilestone}>
-            <IconAdd className={cx('plus-icon')} color="#333" />
+            + 添加里程碑
           </div>
         </div>
         {milestones.map((ms) => (
