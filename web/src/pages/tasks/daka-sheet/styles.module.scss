@@ -48,7 +48,7 @@
     left: 0;
     background: #fff;
     padding: 10px 16px;
-    padding-bottom: 40px;
+    padding-bottom: 100px;
     width: 100vw;
     min-height: 300px;
     border-top-right-radius: 8px;
@@ -72,6 +72,15 @@
     margin: 16px;
     margin-bottom: 40px;
     width: calc(100% - 32px);
+  }
+}
+
+.milestone-list {
+  max-height: 60vh;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
 

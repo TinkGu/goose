@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { trim } from '@tinks/xeno';
 import { useDebounceFn } from '@tinks/xeno/react';
 import { Modal, Portal, toast } from 'app/components';
@@ -8,7 +8,8 @@ import { isInHours } from 'app/utils/time';
 import classnames from 'classnames/bind';
 import { Atom } from 'use-atom-view';
 import GoldCoin from '../../../../public/coin_gold.png';
-import { Daka, db, Task } from '../state';
+import { MilestoneItem } from '../milestone';
+import { Daka, db, Milestone, Task } from '../state';
 import { openTaskActions } from '../task-editor';
 import styles from './styles.module.scss';
 
@@ -29,6 +30,7 @@ function Rating({ value, onChange }: { value: number; onChange: (value: number) 
 
 function DakaSheet({ task, onDestory }: { task: Task; onDestory: () => void }) {
   const [rating, setRating] = useState(1);
+  const [milestones, setMilestones] = useState<Milestone[]>([]);
   const handleSave = useDebounceFn(async () => {
     try {
       await addDaka(task, { score: rating });
@@ -41,6 +43,42 @@ function DakaSheet({ task, onDestory }: { task: Task; onDestory: () => void }) {
   const handleOpenTaskActions = useDebounceFn(() => {
     openTaskActions({ task, onContinue: onDestory });
   });
+
+  const handleDoneMilestone = useDebounceFn(async (ms) => {
+    if (ms.isDone) return;
+    const isOk = await Modal.confirm({
+      position: 'bottom',
+      title: ms.title,
+      content: '确认完成里程碑？',
+    });
+    if (isOk) {
+      ms.isDone = true;
+      ms.doneAt = Date.now();
+      setMilestones(milestones.map((x) => (x === ms ? ms : x)));
+      task.scores += ms.award?.score || 0;
+      task.milestones = task.milestones.map((x) => (x === ms ? ms : x));
+      db.atom.modify((state) => {
+        state.items = state.items.map((x) => (x.id === task.id ? task : x));
+        state.score += ms.award?.score || 0;
+        return state;
+      });
+      await db.save();
+    }
+  });
+
+  useEffect(() => {
+    if (!task.milestones) return;
+    const dones: Milestone[] = [];
+    const undones: Milestone[] = [];
+    for (let x of task.milestones) {
+      if (x.isDone) {
+        dones.push(x);
+      } else {
+        undones.push(x);
+      }
+    }
+    setMilestones(undones.concat(dones));
+  }, [task.milestones]);
 
   return (
     <div className={cx('daka-sheet')}>
@@ -58,6 +96,18 @@ function DakaSheet({ task, onDestory }: { task: Task; onDestory: () => void }) {
           <div className={cx('section-title')}>今天感觉怎么样</div>
           <Rating value={rating} onChange={setRating} />
         </div>
+        {milestones?.length > 0 && (
+          <>
+            <div className={cx('section')}>
+              <div className={cx('section-title')}>里程碑</div>
+            </div>
+            <div className={cx('milestone-list')}>
+              {milestones.map((x) => (
+                <MilestoneItem key={x.createdAt} value={x} onClick={handleDoneMilestone} />
+              ))}
+            </div>
+          </>
+        )}
         <div className={cx('g-btn', 'save-btn')} onClick={handleSave}>
           提交 →
         </div>

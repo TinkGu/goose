@@ -48,7 +48,7 @@ body {
   }
 
   &.green {
-    background-color: rgba(218, 246, 234);
+    background-color: hsl(154, 61%, 91%);
     color: hsl(136, 100%, 30%);
   }
 

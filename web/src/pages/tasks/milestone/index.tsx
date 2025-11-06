@@ -71,8 +71,8 @@ export function MilestoneItem({
         {!!value.award?.score && (
           <div className={cx('milestone-item-right')}>
             <div className={cx('score')}>
-              <img className={cx('score-icon')} src={GoldImg} alt="score" />
               <div className={cx('score-value')}>{value.award.score}</div>
+              <img className={cx('score-icon')} src={GoldImg} alt="score" />
             </div>
           </div>
         )}

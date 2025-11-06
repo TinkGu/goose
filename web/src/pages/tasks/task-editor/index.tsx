@@ -261,7 +261,7 @@ function TaskEditor({ value, onSave, onDestory }: { value?: Task; onSave: (x: Ta
         rows={1}
       />
       <div className={cx('section')}>
-        <div className={cx('section-title')}>
+        <div className={cx('section-title', 'cycle-section-title')}>
           <div className={cx('label')}>
             <IconLoop className={cx('label-icon')} color="#666" />
             周期挑战
@@ -289,9 +289,11 @@ function TaskEditor({ value, onSave, onDestory }: { value?: Task; onSave: (x: Ta
             + 添加里程碑
           </div>
         </div>
-        {milestones.map((ms) => (
-          <MilestoneItem key={ms.createdAt} value={ms} onClick={handleEditMilestone} />
-        ))}
+        <div className={cx('milestone-list')}>
+          {milestones.map((ms) => (
+            <MilestoneItem key={ms.createdAt} value={ms} onClick={handleEditMilestone} />
+          ))}
+        </div>
       </div>
       <div className={cx('g-btn', 'save-btn')} onClick={handleSave}>
         保存

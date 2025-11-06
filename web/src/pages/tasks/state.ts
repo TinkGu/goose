@@ -19,11 +19,11 @@ export interface Task {
   lastDakaAt: number; // 上次打卡时间
   dakas: number; // 总打卡次数
   keeps: number; // 持续打卡天数
-  avg_time: number; // 执行一次，大概需要多少时间。0 表示不统计时间
+  avgTime: number; // 执行一次，大概需要多少时间。0 表示不统计时间
   scores: number; // 收获的总分数
   weeks: number[]; // 每周打卡的标记
   isCycle: boolean; // 是否是周期任务
-  weekMin: number; // 每周最少做几次
+  weekMinTimes: number; // 每周最少做几次
   milestones: Milestone[]; // 里程碑
 }
 
