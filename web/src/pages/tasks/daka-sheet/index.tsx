@@ -34,6 +34,7 @@ function Rating({ value, onChange }: { value: number; onChange: (value: number) 
 function DakaSheet({ task, onDestory }: { task: Task; onDestory: () => void }) {
   const [rating, setRating] = useState(1);
   const [milestones, setMilestones] = useState<Milestone[]>([]);
+  const [doneCount, setDoneCount] = useState(0);
   const handleSave = useDebounceFn(async () => {
     try {
       const completes = await addDaka(task, { score: rating });
@@ -84,6 +85,7 @@ function DakaSheet({ task, onDestory }: { task: Task; onDestory: () => void }) {
       }
     }
     setMilestones(undones.concat(dones));
+    setDoneCount(dones.length);
   }, [task.milestones]);
 
   return (
@@ -105,7 +107,9 @@ function DakaSheet({ task, onDestory }: { task: Task; onDestory: () => void }) {
         {milestones?.length > 0 && (
           <>
             <div className={cx('section')}>
-              <div className={cx('section-title')}>里程碑</div>
+              <div className={cx('section-title')}>
+                里程碑 {doneCount}/{milestones.length}
+              </div>
             </div>
             <div className={cx('milestone-list')}>
               {milestones.map((x) => (
