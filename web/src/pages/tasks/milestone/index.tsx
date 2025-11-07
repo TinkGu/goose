@@ -29,7 +29,7 @@ function getMeetText(x: Milestone) {
   if (x.meetBy === MeetBy.custom) {
     return '';
   }
-  if (x.meetBy === MeetBy.daka_times) {
+  if (x.meetBy === MeetBy.dakaTimes) {
     return '需要打卡 ' + x.meetValue + ' 次';
   }
   return '需要持续打卡 ' + x.meetValue + ' 天';
@@ -37,10 +37,12 @@ function getMeetText(x: Milestone) {
 
 export function MilestoneItem({
   value,
+  className,
   onClick,
   readonly = false,
 }: {
   value: Milestone;
+  className?: string;
   onClick?: (value: Milestone) => void;
   readonly?: boolean;
 }) {
@@ -54,10 +56,10 @@ export function MilestoneItem({
     onClick?.(value);
   });
   return (
-    <div className={cx('milestone-item', { done: value.isDone })} onClick={handleClick}>
+    <div className={cx('milestone-item', { done: value.isDone }, className)} onClick={handleClick}>
       <div className={cx('content')}>
         <div className={cx('milestone-item-left')}>
-          <Checkbox className={cx('checkbox')} checked={value.isDone} />
+          <Checkbox className={cx('checkbox')} checked={!!value?.isDone} />
           <div className={cx('title')}>
             {value.title}
             {!!value.expectedAt && (
@@ -98,11 +100,11 @@ const MeetByOptions = [
   },
   {
     label: '打卡次数',
-    value: MeetBy.daka_times,
+    value: MeetBy.dakaTimes,
   },
   {
     label: '持续打卡天数',
-    value: MeetBy.keep_times,
+    value: MeetBy.keepTimes,
   },
 ];
 
@@ -126,16 +128,16 @@ function MilestoneEditor({
 
   const handleSave = useDebounceFn(() => {
     try {
-      var title = trim(titleRef.current?.value || '');
-      var meetValue = meetValueRef.current?.value ? parseInt(trim(meetValueRef.current?.value)) : 0;
-      var awardTitle = awardTitleRef.current?.value ? trim(awardTitleRef.current?.value) : '';
-      var awardScore = awardScoreRef.current?.value ? parseInt(trim(awardScoreRef.current?.value)) : 0;
-      var expectedAt = 0;
+      const title = trim(titleRef.current?.value || '');
+      const meetValue = meetValueRef.current?.value ? parseInt(trim(meetValueRef.current?.value)) : 0;
+      const awardTitle = awardTitleRef.current?.value ? trim(awardTitleRef.current?.value) : '';
+      const awardScore = awardScoreRef.current?.value ? parseInt(trim(awardScoreRef.current?.value)) : 0;
+      let expectedAt = 0;
       if (!title) {
         throw new Error('请输入里程碑标题');
       }
       if (dateCode) {
-        var timeErrMsg = checkDateCode(dateCode);
+        const timeErrMsg = checkDateCode(dateCode);
         if (timeErrMsg) {
           throw new Error('截止时间: ' + timeErrMsg);
         }
@@ -185,7 +187,7 @@ function MilestoneEditor({
       meetValueRef.current!.value = value.meetValue.toString();
     }
     if (value?.expectedAt) {
-      var dateCode = dayjs(value.expectedAt).format('YYMMDD');
+      const dateCode = dayjs(value.expectedAt).format('YYMMDD');
       setDateCode(dateCode);
     }
   }, [value]);

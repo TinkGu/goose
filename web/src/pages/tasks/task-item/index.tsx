@@ -1,5 +1,6 @@
 import { useDebounceFn } from '@tinks/xeno/react';
 import { Checkbox } from 'app/components/checkbox';
+import { WeekCheckbox } from 'app/components/week-checkbox';
 import classnames from 'classnames/bind';
 import { openDakaSheet } from '../daka-sheet';
 import { checkDone, Task } from '../state';
@@ -25,7 +26,9 @@ export function TaskItem({ task }: { task: Task }) {
       <div className={cx('main')}>
         <div className={cx('content')}>
           <div className={cx('title')}>{task.title}</div>
-          <div className={cx('stats')}></div>
+          <div className={cx('stats')}>
+            <WeekCheckbox value={task.weekdays} />
+          </div>
         </div>
         <div className={cx('progress')}></div>
       </div>

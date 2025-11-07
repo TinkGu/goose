@@ -1,0 +1,238 @@
+.prize {
+  display: flex;
+  color: #e7c98d;
+  font-family: 'STZhongsong', serif;
+  text-align: center;
+  .side-img {
+    width: 65px;
+    height: 97px;
+
+    &.reverse {
+      transform: rotate(180deg) scaleY(-1);
+    }
+  }
+
+  .main {
+    width: 80px;
+  }
+}
+
+.week-prize {
+  position: relative;
+  .week-number {
+    font-family: serif;
+    position: relative;
+    top: -10px;
+    font-size: 42px;
+    font-weight: 800;
+    text-align: center;
+    color: #e4c588;
+  }
+  .title {
+    position: relative;
+    top: -20px;
+    left: 4px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 5px;
+  }
+  .content {
+    position: relative;
+    top: -16px;
+    left: 4px;
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+}
+
+.month-prize {
+  position: relative;
+  .month-number {
+    font-family: serif;
+    position: relative;
+    top: -10px;
+    font-size: 42px;
+    font-weight: 800;
+    text-align: center;
+    color: #e4c588;
+  }
+  .title {
+    position: relative;
+    top: -20px;
+    left: 4px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 5px;
+  }
+  .content {
+    position: relative;
+    top: -16px;
+    left: 4px;
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+}
+
+.plan-prize {
+  position: relative;
+
+  &.sm {
+    .plan-number {
+      top: 15px;
+      font-size: 32px;
+    }
+    .title {
+      top: 8px;
+    }
+  }
+  .plan-number {
+    font-family: serif;
+    position: relative;
+    top: 0;
+    font-size: 42px;
+    font-weight: 800;
+    text-align: center;
+    color: #e4c588;
+  }
+  .title {
+    position: relative;
+    top: -8px;
+    left: 4px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 2px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.prize-modal {
+  margin-top: 60px;
+  position: relative;
+  width: 100vw;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+
+  &.entering {
+    .prize {
+      opacity: 1;
+    }
+  }
+  &.exiting {
+    opacity: 0;
+  }
+
+  .glow {
+    position: absolute;
+    z-index: 0;
+    margin: 0 auto;
+    padding: 60px;
+    color: #fff;
+    text-align: center;
+    width: 100%;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -50%; /* 上下左右各溢出 50%，保证光晕足够大 */
+      z-index: -1; /* 沉到内容背后 */
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 60%);
+      filter: blur(60px); /* 模糊半径越大，光晕越柔和 */
+      pointer-events: none; /* 不挡鼠标 */
+    }
+  }
+
+  .prize {
+    position: relative;
+    margin: 0 auto;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+  }
+
+  .modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    margin: 50px 0 20px;
+  }
+
+  .modal-desc {
+    font-size: 14px;
+    color: #ebebeb;
+  }
+
+  .award-btn {
+    position: relative;
+    font-size: 16px;
+    margin: 20px auto 0;
+    width: 200px;
+    color: #fff;
+    text-align: center;
+    background-color: #333;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 800;
+
+    .coin-icon {
+      position: relative;
+      top: -1px;
+      margin: 0 4px;
+      width: 16px;
+      height: 16px;
+      vertical-align: middle;
+    }
+  }
+}
+
+.milestone-modal {
+  position: relative;
+  width: 100vw;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+
+  &.exiting {
+    opacity: 0;
+  }
+
+  .modal-main {
+    width: 300px;
+    margin: 0 auto 40px;
+    background-color: #fff;
+    border-radius: 4px;
+  }
+  .modal-title {
+    margin-bottom: 40px;
+    font-size: 36px;
+    font-weight: 600;
+    color: #e4c588;
+  }
+  .milestone-item {
+    border: none;
+  }
+
+  .next-btn {
+    position: relative;
+    font-size: 16px;
+    margin: 20px auto 0;
+    width: 200px;
+    color: #fff;
+    text-align: center;
+    background-color: #333;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 800;
+  }
+}

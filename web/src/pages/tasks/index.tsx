@@ -5,7 +5,7 @@ import classnames from 'classnames/bind';
 import { useAtomView } from 'use-atom-view';
 import SiteIcon from '../../../public/icons-48.png';
 import { showSettings } from '../settings';
-import { db, Task } from './state';
+import { db, Task, washTasks } from './state';
 import { addTask } from './task-editor';
 import { TaskItem } from './task-item';
 import styles from './styles.module.scss';
@@ -26,6 +26,7 @@ export default function PageMarkList() {
   useEffect(() => {
     async function init() {
       await db.pull();
+      await washTasks();
     }
     init();
   }, []);

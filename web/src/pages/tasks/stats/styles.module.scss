@@ -1,0 +1,125 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  text-align: left;
+  background: rgba(0, 0, 0, 0.6);
+
+  .mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+  }
+}
+
+.daka-sheet {
+  .header-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    .icon {
+      width: 24px;
+      height: 24px;
+    }
+  }
+  .header {
+    margin-top: 30vh;
+    width: 100%;
+    text-align: center;
+    .icon {
+      font-size: 72px;
+    }
+
+    .title {
+      font-size: 24px;
+      color: #fff;
+      font-weight: 800;
+    }
+  }
+
+  .content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    min-height: 300px;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    background-color: #fff;
+  }
+}
+
+.task-stats-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-radius: 8px;
+  .stats-item {
+    flex: 1;
+    text-align: center;
+    .item-value {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: #e3b54c;
+    }
+    .item-label {
+      font-size: 12px;
+      color: #666;
+    }
+  }
+}
+
+.task-stats-bullets {
+  padding: 10px 16px;
+  border-radius: 8px;
+
+  .bullet {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #999;
+
+    .strong-num {
+      margin-left: 6px;
+      font-weight: 800;
+      font-size: 22px;
+      color: #583f12;
+    }
+
+    .underline {
+      text-decoration: underline;
+      text-decoration-color: #dd4c4f;
+      text-underline-offset: 4px;
+    }
+  }
+}
+
+.score-bullet {
+  display: flex;
+  align-items: center;
+  border: solid 1px #d6ae66;
+  border-radius: 4px;
+  padding: 4px 10px;
+  background-color: hsl(45, 100%, 90%);
+  width: 100%;
+  font-size: 14px;
+  color: #999;
+
+  .score-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+  }
+
+  .strong-num {
+    margin-left: 6px;
+    font-weight: 800;
+    font-size: 18px;
+    color: #583f12;
+  }
+}

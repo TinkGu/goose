@@ -8,13 +8,14 @@ import { IconCross, IconFlag, IconLoop } from 'app/components/icons';
 import classnames from 'classnames/bind';
 import { MilestoneItem, openMilestoneEditor } from '../milestone';
 import { db, Milestone, Task, TaskStatus } from '../state';
+import { showStats } from '../stats';
 import styles from './styles.module.scss';
 
 const cx = classnames.bind(styles);
 
 export function addTask() {
   const onSave = async (value: Task) => {
-    var finalTask = {
+    const finalTask = {
       ...value,
       id: db.uuid(),
       createdAt: Date.now(),
@@ -61,7 +62,17 @@ export function editTask(rawTask: Task) {
   });
 }
 
-function MoreMenu({ task, onDestory, onHide }: { task: Task; onDestory: () => void; onHide: () => void }) {
+function MoreMenu({
+  task,
+  onDestory,
+  onHide,
+  ignoreStats,
+}: {
+  task: Task;
+  onDestory: () => void;
+  onHide: () => void;
+  ignoreStats: boolean;
+}) {
   // 删除任务
   const handleDelete = useDebounceFn(async () => {
     try {
@@ -103,6 +114,11 @@ function MoreMenu({ task, onDestory, onHide }: { task: Task; onDestory: () => vo
     }
   });
 
+  const handleShowStats = useDebounceFn(() => {
+    showStats(task);
+    onDestory();
+  });
+
   return (
     <div className={cx('more-menu-modal')}>
       <div className={cx('mask')} onClick={onHide}></div>
@@ -113,6 +129,11 @@ function MoreMenu({ task, onDestory, onHide }: { task: Task; onDestory: () => vo
         <div className={cx('menu-item')} onClick={handlePause}>
           {task.status === TaskStatus.paused ? '恢复' : '暂停'}
         </div>
+        {!ignoreStats && (
+          <div className={cx('menu-item')} onClick={handleShowStats}>
+            统计
+          </div>
+        )}
         <div className={cx('menu-item')} onClick={handleDelete}>
           删除
         </div>
@@ -121,14 +142,14 @@ function MoreMenu({ task, onDestory, onHide }: { task: Task; onDestory: () => vo
   );
 }
 
-export function openTaskActions({ task, onContinue }: { task: Task; onContinue: () => void }) {
+export function openTaskActions({ task, onContinue, ignoreStats }: { task: Task; onContinue: () => void; ignoreStats: boolean }) {
   Portal.show({
     content: (onClose) => {
       const onDestory = () => {
         onClose();
         onContinue();
       };
-      return <MoreMenu task={task} onDestory={onDestory} onHide={onClose} />;
+      return <MoreMenu task={task} onDestory={onDestory} onHide={onClose} ignoreStats={ignoreStats} />;
     },
   });
 }
@@ -203,7 +224,7 @@ function TaskEditor({ value, onSave, onDestory }: { value?: Task; onSave: (x: Ta
   });
 
   const handleEditMilestone = useDebounceFn((ms: Milestone) => {
-    var index = milestones.findIndex((x) => x === ms);
+    const index = milestones.findIndex((x) => x === ms);
     openMilestoneEditor({
       milestone: ms,
       onSave: (ms: Milestone) => {

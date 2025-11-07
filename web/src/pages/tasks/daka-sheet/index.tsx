@@ -4,12 +4,16 @@ import { useDebounceFn } from '@tinks/xeno/react';
 import { Modal, Portal, toast } from 'app/components';
 import { IconMoreCircle } from 'app/components/icons';
 import { createGitFile, JsonDb } from 'app/utils/json-service';
-import { isInHours } from 'app/utils/time';
+import { getMonthWeek, isInHours } from 'app/utils/time';
 import classnames from 'classnames/bind';
+import dayjs from 'dayjs';
 import { Atom } from 'use-atom-view';
 import GoldCoin from '../../../../public/coin_gold.png';
 import { MilestoneItem } from '../milestone';
-import { Daka, db, Milestone, Task } from '../state';
+import { plans } from '../plans';
+import { gainPrizes } from '../prize';
+import { Daka, db, getWeekPeriod, isPerfectMonthPlan, isPerfectWeekPlan, MeetBy, Milestone, Task } from '../state';
+import { showStats } from '../stats';
 import { openTaskActions } from '../task-editor';
 import styles from './styles.module.scss';
 
@@ -33,15 +37,18 @@ function DakaSheet({ task, onDestory }: { task: Task; onDestory: () => void }) {
   const [milestones, setMilestones] = useState<Milestone[]>([]);
   const handleSave = useDebounceFn(async () => {
     try {
-      await addDaka(task, { score: rating });
+      const completes = await addDaka(task, { score: rating });
       onDestory();
+      await gainPrizes(completes);
+      showStats(task);
     } catch (err) {
       toast.error(err);
+      console.error(err);
     }
   });
 
   const handleOpenTaskActions = useDebounceFn(() => {
-    openTaskActions({ task, onContinue: onDestory });
+    openTaskActions({ task, onContinue: onDestory, ignoreStats: false });
   });
 
   const handleDoneMilestone = useDebounceFn(async (ms) => {
@@ -116,11 +123,86 @@ function DakaSheet({ task, onDestory }: { task: Task; onDestory: () => void }) {
   );
 }
 
+function completeMilestone(milestone: Milestone) {
+  milestone.isDone = true;
+  milestone.doneAt = Date.now();
+}
+
+// 自动完成里程碑
+function autoCompleteMilestones(task: Task) {
+  let completes: Milestone[] = [];
+  const insetPlans = plans.map((x) => {
+    return { ...x, taskId: task.id, createdAt: task.createdAt, planType: 'plan' };
+  });
+  const milestones = [...task.milestones, ...insetPlans];
+  for (let x of milestones) {
+    if (x.isDone) continue;
+    if (x.planType === 'plan' && x.key) {
+      if (task.prizes?.includes(x.key)) continue;
+    }
+    let shouldComplete = false;
+    if (x.meetBy === MeetBy.dakaTimes && x.meetValue && task.dakas >= x.meetValue) {
+      shouldComplete = true;
+    }
+    if (x.meetBy === MeetBy.keepTimes && x.meetValue && task.keeps >= x.meetValue) {
+      shouldComplete = true;
+    }
+    if (shouldComplete) {
+      completes.push(x);
+      completeMilestone(x);
+      if (x.planType === 'plan' && x.key) {
+        task.prizes = task.prizes || [];
+        task.prizes.push(x.key);
+      }
+    }
+  }
+
+  // 检查周计划
+  const { month, week } = getMonthWeek();
+  if (isPerfectWeekPlan(task)) {
+    const weekPeriod = getWeekPeriod();
+    completes.unshift({
+      planType: 'week',
+      key: weekPeriod,
+      taskId: task.id,
+      title: `${month} 月完美第 ${week} 周`,
+      createdAt: Date.now(),
+      isDone: true,
+      doneAt: Date.now(),
+      award: { score: 10 },
+      meetBy: MeetBy.custom,
+    });
+    task.prizes = task.prizes || [];
+    task.prizes.push(weekPeriod);
+  }
+
+  // 检查月计划
+  if (isPerfectMonthPlan(task)) {
+    const now = dayjs();
+    const plan = `${now.format('YY')}_${month}`;
+    completes.unshift({
+      planType: 'month',
+      key: plan,
+      taskId: task.id,
+      title: `完美 ${month} 月`,
+      createdAt: Date.now(),
+      isDone: true,
+      doneAt: Date.now(),
+      award: { score: 10 },
+      meetBy: MeetBy.custom,
+    });
+    task.prizes = task.prizes || [];
+    task.prizes.push(plan);
+  }
+
+  return completes;
+}
+
 // 添加一个打卡记录
 export async function addDaka(task: Task, daka: Partial<Daka>) {
-  var rawDakaCount = task.dakas;
+  const rawDakaCount = task.dakas;
   task.dakas++;
-  var dakaItem = {
+  const dakaItem = {
     createdAt: Date.now(),
     score: daka.score || 1,
   } as Daka;
@@ -131,21 +213,37 @@ export async function addDaka(task: Task, daka: Partial<Daka>) {
   // 如果上次打卡时间在 30 小时之内，则连续打卡天数加1
   if (task.lastDakaAt && isInHours(task.lastDakaAt, dakaItem.createdAt, 30)) {
     task.keeps++;
+    task.maxKeeps = Math.max(task.maxKeeps || 0, task.keeps || 0);
   }
+
+  // 周期记录
+  let weekday: number = dayjs().day();
+  weekday = weekday === 0 ? 6 : weekday - 1;
+  task.weekdays[weekday] = 1;
+
   task.lastDakaAt = dakaItem.createdAt;
-  task.scores += dakaItem.score;
+  let completes = autoCompleteMilestones(task);
+  let gains = dakaItem.score;
+  for (let x of completes) {
+    task.scores += x.award?.score || 0;
+    gains += x.award?.score || 0;
+  }
+  task.scores += gains;
 
   // 更新任务数据
   db.atom.modify((state) => {
     state.items = state.items.map((x) => (x.id === task.id ? task : x));
-    state.score += dakaItem.score;
+    state.score += gains;
     return state;
   });
   await db.save();
+  return completes;
+}
 
+async function createDakaLog(task: Task, dakaItem: Daka, rawDakaCount: number) {
   try {
     // 新建打卡仓库
-    var dakaEntry = {
+    const dakaEntry = {
       repo: 'TinkGu/private-cloud',
       path: `goose/dakas/task_${task.id}`,
     };
@@ -155,7 +253,7 @@ export async function addDaka(task: Task, daka: Partial<Daka>) {
         content: [dakaItem],
       });
     } else {
-      var dakaDb = new JsonDb({
+      const dakaDb = new JsonDb({
         ...dakaEntry,
         atom: Atom.of({
           items: [] as Daka[],
