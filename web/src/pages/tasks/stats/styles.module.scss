@@ -123,3 +123,24 @@
     color: #583f12;
   }
 }
+
+.prize-list {
+  margin: 20px auto 0;
+  width: max-content;
+  max-width: 100vw;
+}
+
+.prizes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: left;
+  .prize {
+    width: 106px;
+    height: 60px;
+  }
+  .prize-box {
+    position: relative;
+    transform: scale(0.5) translate(-50%, -50%);
+  }
+}

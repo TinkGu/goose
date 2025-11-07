@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { delay } from '@tinks/xeno';
 import { useDebounceFn } from '@tinks/xeno/react';
-import { Popup } from 'app/components';
+import { Modal, Popup } from 'app/components';
 import classnames from 'classnames/bind';
 import GoldCoin from '../../../../public/coin_gold.png';
 import PrizeSideImg from '../../../../public/prize_side.png';
 import { MilestoneItem } from '../milestone';
 import { plans } from '../plans';
-import { MeetBy, Milestone } from '../state';
+import { MeetBy, Milestone, Task } from '../state';
 import styles from './styles.module.scss';
 
 const cx = classnames.bind(styles);
@@ -105,7 +105,7 @@ function PrizeModal({ milestone, onDestroy }: { milestone: Milestone; onDestroy:
 }
 
 // 根据 keycode，自动判断是什么类型的
-function UniPrize({ keycode }: { keycode: string }) {
+export function UniPrize({ keycode }: { keycode: string }) {
   const [prefix] = keycode.split('_');
   if (prefix === 'week') {
     return <WeekPrize keyCode={keycode} />;
@@ -164,5 +164,27 @@ function innerGainPrizes(milestones: Milestone[], onEnd: () => void) {
 export function gainPrizes(milestones: Milestone[]) {
   return new Promise<void>((resolve) => {
     innerGainPrizes(milestones, resolve);
+  });
+}
+
+export function openTaskPrizes(task: Task) {
+  Modal.show({
+    position: 'bottom',
+    maskClosable: true,
+    wrapperClassName: cx('task-prizes-modal-wrapper'),
+    content: () => {
+      const prizes = [...(task.prizes || [])].reverse();
+      return (
+        <div className={cx('task-prizes-modal-list')}>
+          {prizes.map((x) => (
+            <div className={cx('task-prizes-modal-item-wrapper')} key={x}>
+              <div className={cx('task-prizes-modal-item')}>
+                <UniPrize keycode={x} />
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    },
   });
 }

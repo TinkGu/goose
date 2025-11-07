@@ -1,9 +1,11 @@
+import { useMemo } from 'react';
 import { useDebounceFn } from '@tinks/xeno/react';
 import { Portal } from 'app/components';
 import { IconMoreCircle } from 'app/components/icons';
 import classnames from 'classnames/bind';
 import GoldCoin from '../../../../public/coin_gold.png';
 import { findNearbyPlan } from '../plans';
+import { openTaskPrizes, UniPrize } from '../prize';
 import { Task } from '../state';
 import { openTaskActions } from '../task-editor';
 import styles from './styles.module.scss';
@@ -14,9 +16,17 @@ function TaskStats({ task, onDestory }: { task: Task; onDestory: () => void }) {
   const weekDakaDays = task.weekdays.filter((x) => x === 1).length;
   const diffDakaDays = (task.weekMinTimes || 7) - weekDakaDays;
   const nearbyPlans = findNearbyPlan(task);
+  const prizes = useMemo(() => [...(task.prizes || [])].reverse().slice(0, 6), [task.prizes]);
 
   const handleOpenTaskActions = useDebounceFn(() => {
     openTaskActions({ task, onContinue: onDestory, ignoreStats: true });
+  });
+
+  const handleExpandPrizes = useDebounceFn(() => {
+    if (!task.prizes?.length) {
+      return;
+    }
+    openTaskPrizes(task);
   });
 
   return (
@@ -29,6 +39,17 @@ function TaskStats({ task, onDestory }: { task: Task; onDestory: () => void }) {
       <div className={cx('header')}>
         <div className={cx('icon')}>{task.icon || '🤔'}</div>
         <div className={cx('title')}>{task.title}</div>
+        <div className={cx('prize-list')} onClick={handleExpandPrizes}>
+          <div className={cx('prizes')}>
+            {prizes.map((x) => (
+              <div className={cx('prize')} key={x}>
+                <div className={cx('prize-box')}>
+                  <UniPrize keycode={x} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
       <div className={cx('content')}>
         <div className={cx('task-stats-row')}>
