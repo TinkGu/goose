@@ -5,6 +5,7 @@ import classnames from 'classnames/bind';
 import { useAtomView } from 'use-atom-view';
 import SiteIcon from '../../../public/icons-48.png';
 import { showSettings } from '../settings';
+import { showAwardPage } from './award';
 import { showPausedTasks } from './paused-tasks';
 import { db, Task, TaskStatus, washTasks } from './state';
 import { addTask } from './task-editor';
@@ -45,7 +46,7 @@ export default function PageMarkList() {
             <div className={cx('logo')}>
               <img src={SiteIcon} />
             </div>
-            <div className={cx('main-scores')}>
+            <div className={cx('main-scores')} onClick={showAwardPage}>
               <IconCoin className={cx('gold-icon')} />
               {score || '0'}
             </div>
