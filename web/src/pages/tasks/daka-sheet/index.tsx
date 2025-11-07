@@ -132,14 +132,12 @@ function completeMilestone(milestone: Milestone) {
 function autoCompleteMilestones(task: Task) {
   let completes: Milestone[] = [];
   const insetPlans = plans.map((x) => {
-    return { ...x, taskId: task.id, createdAt: task.createdAt, planType: 'plan' };
+    return { ...x, taskId: task.id, createdAt: task.createdAt };
   });
-  const milestones = [...task.milestones, ...insetPlans];
+  const milestones = [...(task.milestones || []), ...insetPlans];
   for (let x of milestones) {
     if (x.isDone) continue;
-    if (x.planType === 'plan' && x.key) {
-      if (task.prizes?.includes(x.key)) continue;
-    }
+    if (x.key && task.prizes?.includes(x.key)) continue;
     let shouldComplete = false;
     if (x.meetBy === MeetBy.dakaTimes && x.meetValue && task.dakas >= x.meetValue) {
       shouldComplete = true;
@@ -150,7 +148,7 @@ function autoCompleteMilestones(task: Task) {
     if (shouldComplete) {
       completes.push(x);
       completeMilestone(x);
-      if (x.planType === 'plan' && x.key) {
+      if (x.key) {
         task.prizes = task.prizes || [];
         task.prizes.push(x.key);
       }
@@ -161,9 +159,9 @@ function autoCompleteMilestones(task: Task) {
   const { month, week } = getMonthWeek();
   if (isPerfectWeekPlan(task)) {
     const weekPeriod = getWeekPeriod();
+    const key = 'week_' + weekPeriod;
     completes.unshift({
-      planType: 'week',
-      key: weekPeriod,
+      key,
       taskId: task.id,
       title: `${month} 月完美第 ${week} 周`,
       createdAt: Date.now(),
@@ -173,16 +171,15 @@ function autoCompleteMilestones(task: Task) {
       meetBy: MeetBy.custom,
     });
     task.prizes = task.prizes || [];
-    task.prizes.push(weekPeriod);
+    task.prizes.push(key);
   }
 
   // 检查月计划
   if (isPerfectMonthPlan(task)) {
     const now = dayjs();
-    const plan = `${now.format('YY')}_${month}`;
+    const key = `month_${now.format('YY')}_${month}`;
     completes.unshift({
-      planType: 'month',
-      key: plan,
+      key,
       taskId: task.id,
       title: `完美 ${month} 月`,
       createdAt: Date.now(),
@@ -192,7 +189,7 @@ function autoCompleteMilestones(task: Task) {
       meetBy: MeetBy.custom,
     });
     task.prizes = task.prizes || [];
-    task.prizes.push(plan);
+    task.prizes.push(key);
   }
 
   return completes;

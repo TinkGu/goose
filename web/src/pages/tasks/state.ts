@@ -48,7 +48,6 @@ export enum MeetBy {
 // 里程碑
 export interface Milestone {
   key?: string;
-  planType?: string;
   taskId: number;
   title: string;
   createdAt: number;
@@ -107,11 +106,11 @@ export function getWeekPeriod() {
 }
 
 export function weekPeriodToObj(key: string) {
-  const strs = key.split('_');
+  const [_, year, month, week] = key.split('_');
   return {
-    year: Number(strs[0]),
-    month: Number(strs[1]),
-    week: Number(strs[2]),
+    year: Number(year),
+    month: Number(month),
+    week: Number(week),
   };
 }
 
@@ -121,7 +120,7 @@ export function isPerfectWeekPlan(task: Task) {
     return false;
   }
   const weekPeriod = getWeekPeriod();
-  if (task.prizes?.includes(weekPeriod)) {
+  if (task.prizes?.includes('week_' + weekPeriod)) {
     return false;
   }
   const weekNeeds = task.weekMinTimes || 7;
@@ -138,17 +137,17 @@ export function isPerfectWeekPlan(task: Task) {
 export function isPerfectMonthPlan(task: Task) {
   const now = dayjs();
   const { month } = getMonthWeek();
-  if (task.prizes?.includes(`${now.format('YY')}_${month}`)) {
+  if (task.prizes?.includes(`month_${now.format('YY')}_${month}`)) {
     return false;
   }
   if (!task.prizes?.length) {
     return false;
   }
   const plans = [
-    `${now.format('YY')}_${month}_1`,
-    `${now.format('YY')}_${month}_2`,
-    `${now.format('YY')}_${month}_3`,
-    `${now.format('YY')}_${month}_4`,
+    `week_${now.format('YY')}_${month}_1`,
+    `week_${now.format('YY')}_${month}_2`,
+    `week_${now.format('YY')}_${month}_3`,
+    `week_${now.format('YY')}_${month}_4`,
   ];
   for (let plan of plans) {
     if (!task.prizes.includes(plan)) {

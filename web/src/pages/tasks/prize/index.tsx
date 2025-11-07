@@ -7,7 +7,7 @@ import GoldCoin from '../../../../public/coin_gold.png';
 import PrizeSideImg from '../../../../public/prize_side.png';
 import { MilestoneItem } from '../milestone';
 import { plans } from '../plans';
-import { MeetBy, Milestone, weekPeriodToObj } from '../state';
+import { MeetBy, Milestone } from '../state';
 import styles from './styles.module.scss';
 
 const cx = classnames.bind(styles);
@@ -27,7 +27,7 @@ export function Prize({ children, className }: { children: React.ReactNode; clas
 }
 
 export function WeekPrize({ keyCode }: { keyCode: string }) {
-  const { year, month, week } = weekPeriodToObj(keyCode);
+  const [_, year, month, week] = keyCode.split('_');
   return (
     <Prize className={cx('week-prize')}>
       <div className={cx('week-number')}>{week}</div>
@@ -40,7 +40,7 @@ export function WeekPrize({ keyCode }: { keyCode: string }) {
 }
 
 export function MonthPrize({ keyCode }: { keyCode: string }) {
-  const [year, month] = keyCode.split('_');
+  const [_, year, month] = keyCode.split('_');
   return (
     <Prize className={cx('month-prize')}>
       <div className={cx('month-number')}>{month}</div>
@@ -87,9 +87,7 @@ function PrizeModal({ milestone, onDestroy }: { milestone: Milestone; onDestroy:
     <div className={cx('prize-modal', { exiting: isExiting, entering: isEntering })}>
       <div className={cx('glow')}></div>
       <div className={cx('prize')}>
-        {milestone.planType == 'week' && <WeekPrize keyCode={milestone.key!} />}
-        {milestone.planType == 'month' && <MonthPrize keyCode={milestone.key!} />}
-        {milestone.planType == 'plan' && <PlanPrize keyCode={milestone.key!} />}
+        <UniPrize keycode={milestone.key!} />
       </div>
       <div className={cx('modal-title')}>🏆 好耶ヾ(^▽^)ノ</div>
       <div className={cx('modal-desc')}>
@@ -104,6 +102,18 @@ function PrizeModal({ milestone, onDestroy }: { milestone: Milestone; onDestroy:
       )}
     </div>
   );
+}
+
+// 根据 keycode，自动判断是什么类型的
+function UniPrize({ keycode }: { keycode: string }) {
+  const [prefix] = keycode.split('_');
+  if (prefix === 'week') {
+    return <WeekPrize keyCode={keycode} />;
+  }
+  if (prefix === 'month') {
+    return <MonthPrize keyCode={keycode} />;
+  }
+  return <PlanPrize keyCode={keycode} />;
 }
 
 function MilestoneModal({ milestone, onDestroy }: { milestone: Milestone; onDestroy: () => void }) {
@@ -143,7 +153,7 @@ function innerGainPrizes(milestones: Milestone[], onEnd: () => void) {
         onDestroy();
         innerGainPrizes(milestones, onEnd);
       };
-      if (ms.planType) {
+      if (ms.key) {
         return <PrizeModal milestone={ms} onDestroy={onNext} />;
       }
       return <MilestoneModal milestone={ms} onDestroy={onNext} />;
