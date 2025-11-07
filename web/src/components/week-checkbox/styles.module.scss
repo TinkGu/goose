@@ -1,0 +1,14 @@
+.week-checkbox {
+  display: flex;
+  width: 100%;
+
+  .week-item {
+    text-align: center;
+    margin-right: 4px;
+  }
+
+  .checkbox {
+    width: 14px;
+    height: 14px;
+  }
+}
