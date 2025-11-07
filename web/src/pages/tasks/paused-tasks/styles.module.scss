@@ -1,0 +1,55 @@
+.paused-tasks-panel {
+  padding-bottom: 40px;
+  min-height: 200px;
+
+  .empty {
+    padding: 10px;
+    height: 200px;
+    line-height: 200px;
+    text-align: center;
+    color: #aaa;
+    font-size: 16px;
+  }
+}
+
+.paused-task-item {
+  padding: 10px;
+  border: solid 1px #ededed;
+  background-color: #fff;
+
+  .main {
+    display: flex;
+    align-items: center;
+  }
+
+  .icon {
+    font-size: 32px;
+    margin-right: 10px;
+  }
+
+  .name {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .right {
+    display: flex;
+
+    .btn {
+      font-size: 13px;
+      color: #36c;
+      cursor: pointer;
+    }
+  }
+
+  .footer {
+    display: flex;
+    .days {
+      font-size: 13px;
+      color: #aaa;
+    }
+    .days:first-child {
+      margin-right: 10px;
+    }
+  }
+}

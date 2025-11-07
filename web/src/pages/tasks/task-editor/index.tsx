@@ -107,7 +107,7 @@ function MoreMenu({
       }));
       await db.save();
       onDestory();
-      toast.info(task.status === TaskStatus.paused ? '已恢复' : '已暂停');
+      toast.info(task.status === TaskStatus.paused ? '暂停成功' : '恢复成功');
     } catch (err) {
       toast.error(err);
       console.error(err);

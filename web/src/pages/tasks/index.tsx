@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useDebounceFn } from '@tinks/xeno/react';
-import { IconAdd, IconAll, IconCoin } from 'app/components/icons';
+import { IconAdd, IconAll, IconCoin, IconResume } from 'app/components/icons';
 import classnames from 'classnames/bind';
 import { useAtomView } from 'use-atom-view';
 import SiteIcon from '../../../public/icons-48.png';
 import { showSettings } from '../settings';
-import { db, Task, washTasks } from './state';
+import { showPausedTasks } from './paused-tasks';
+import { db, Task, TaskStatus, washTasks } from './state';
 import { addTask } from './task-editor';
 import { TaskItem } from './task-item';
 import styles from './styles.module.scss';
@@ -19,7 +20,7 @@ export default function PageMarkList() {
 
   useEffect(() => {
     const list = db.atom.get().items;
-    let next = list;
+    let next = list.filter((item) => item.status !== TaskStatus.paused);
     setRecords(next);
   }, [items]);
 
@@ -52,6 +53,9 @@ export default function PageMarkList() {
           <div className={cx('rights')}>
             <div className={cx('btn', 'icon')} onClick={handleAddTask}>
               <IconAdd />
+            </div>
+            <div className={cx('btn', 'icon')} onClick={showPausedTasks}>
+              <IconResume />
             </div>
             <div className={cx('btn', 'icon')} onClick={showSettings}>
               <IconAll />

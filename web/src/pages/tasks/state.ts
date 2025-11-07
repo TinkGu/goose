@@ -86,6 +86,9 @@ export async function washTasks() {
   let shouldSave = false;
   const { items } = db.atom.get();
   for (let task of items) {
+    if (task.status === TaskStatus.paused) {
+      continue;
+    }
     const period = getWeekPeriod();
     if (task.weekPeriod !== period) {
       task.weekPeriod = period;
