@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { delay } from '@tinks/xeno';
 import { useDebounceFn } from '@tinks/xeno/react';
 import { Modal, Popup } from 'app/components';
+import { IconCoin } from 'app/components/icons';
 import classnames from 'classnames/bind';
-import GoldCoin from '../../../../public/coin_gold.png';
 import PrizeSideImg from '../../../../public/prize_side.png';
 import { MilestoneItem } from '../milestone';
 import { plans } from '../plans';
@@ -96,7 +96,7 @@ function PrizeModal({ milestone, onDestroy }: { milestone: Milestone; onDestroy:
       {!!milestone.award?.score && (
         <div className={cx('award-btn')} onClick={handleExit}>
           领取
-          <img className={cx('coin-icon')} src={GoldCoin} alt="" />
+          <IconCoin className={cx('coin-icon')} />
           {milestone.award?.score}
         </div>
       )}

@@ -5,11 +5,10 @@ import { Modal, toast } from 'app/components';
 import { Checkbox } from 'app/components/checkbox';
 import { DateInput } from 'app/components/date-input';
 import { FlatSelector } from 'app/components/flat-selector';
-import { IconCross, IconTime, IconTrash } from 'app/components/icons';
+import { IconCoin, IconCross, IconTime, IconTrash } from 'app/components/icons';
 import { checkDateCode, dateCodeToDate } from 'app/utils/time';
 import classnames from 'classnames/bind';
 import dayjs from 'dayjs';
-import GoldImg from '../../../../public/coin_gold.png';
 import { MeetBy, Milestone } from '../state';
 import styles from './styles.module.scss';
 
@@ -74,7 +73,7 @@ export function MilestoneItem({
           <div className={cx('milestone-item-right')}>
             <div className={cx('score')}>
               <div className={cx('score-value')}>{value.award.score}</div>
-              <img className={cx('score-icon')} src={GoldImg} alt="score" />
+              <IconCoin className={cx('score-icon')} />
             </div>
           </div>
         )}

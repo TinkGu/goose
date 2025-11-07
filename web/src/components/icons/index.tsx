@@ -1,4 +1,5 @@
 import classnames from 'classnames/bind';
+import GoldCoinImg from '../../../public/coin_gold.png';
 import styles from './styles.module.scss';
 
 const cx = classnames.bind(styles);
@@ -431,4 +432,8 @@ export function IconTime({ className, color = '#333' }: { className?: string; co
       />
     </svg>
   );
+}
+
+export function IconCoin({ className, onClick }: { className?: string; onClick?: () => void }) {
+  return <img src={GoldCoinImg} alt="coin" className={cx('gold-icon', className)} onClick={onClick} />;
 }

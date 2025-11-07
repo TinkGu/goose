@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDebounceFn } from '@tinks/xeno/react';
-import { IconAdd, IconAll } from 'app/components/icons';
+import { IconAdd, IconAll, IconCoin } from 'app/components/icons';
 import classnames from 'classnames/bind';
 import { useAtomView } from 'use-atom-view';
 import SiteIcon from '../../../public/icons-48.png';
@@ -44,7 +44,10 @@ export default function PageMarkList() {
             <div className={cx('logo')}>
               <img src={SiteIcon} />
             </div>
-            <div className={cx('scores')}>{score || ''}</div>
+            <div className={cx('main-scores')}>
+              <IconCoin className={cx('gold-icon')} />
+              {score || '0'}
+            </div>
           </div>
           <div className={cx('rights')}>
             <div className={cx('btn', 'icon')} onClick={handleAddTask}>

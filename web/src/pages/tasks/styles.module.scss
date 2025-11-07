@@ -216,3 +216,23 @@
     font-weight: bold;
   }
 }
+
+.main-scores {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  transform: translateX(-50%);
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+  color: #000;
+  background: #f2df7e;
+  padding: 2px 8px;
+  border-radius: 4px;
+
+  .gold-icon {
+    position: relative;
+    top: 2px;
+    margin-right: 4px;
+  }
+}

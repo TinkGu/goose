@@ -1,9 +1,8 @@
 import { useMemo } from 'react';
 import { useDebounceFn } from '@tinks/xeno/react';
 import { Portal } from 'app/components';
-import { IconMoreCircle } from 'app/components/icons';
+import { IconCoin, IconMoreCircle } from 'app/components/icons';
 import classnames from 'classnames/bind';
-import GoldCoin from '../../../../public/coin_gold.png';
 import { findNearbyPlan } from '../plans';
 import { openTaskPrizes, UniPrize } from '../prize';
 import { Task } from '../state';
@@ -68,7 +67,7 @@ function TaskStats({ task, onDestory }: { task: Task; onDestory: () => void }) {
         </div>
         <div className={cx('task-stats-bullets')}>
           <div className={cx('score-bullet')}>
-            <img src={GoldCoin} alt="score" className={cx('score-icon')} />
+            <IconCoin className={cx('score-icon')} />
             累计获得积分 <span className={cx('strong-num')}>{task.scores}</span>
           </div>
           {diffDakaDays > 0 && (

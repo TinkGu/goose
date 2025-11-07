@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react';
 import { trim } from '@tinks/xeno';
 import { useDebounceFn } from '@tinks/xeno/react';
 import { Modal, Portal, toast } from 'app/components';
-import { IconMoreCircle } from 'app/components/icons';
+import { IconCoin, IconMoreCircle } from 'app/components/icons';
 import { createGitFile, JsonDb } from 'app/utils/json-service';
 import { getMonthWeek, isInHours } from 'app/utils/time';
 import classnames from 'classnames/bind';
 import dayjs from 'dayjs';
 import { Atom } from 'use-atom-view';
-import GoldCoin from '../../../../public/coin_gold.png';
 import { MilestoneItem } from '../milestone';
 import { plans } from '../plans';
 import { gainPrizes } from '../prize';
@@ -25,7 +24,7 @@ function Rating({ value, onChange }: { value: number; onChange: (value: number) 
     <div className={cx('rating')}>
       {RATING_VALUES.map((x) => (
         <span key={x} className={cx('rating-value', { active: x <= value })}>
-          <img src={GoldCoin} onClick={() => onChange(x)} />
+          <IconCoin onClick={() => onChange(x)} />
         </span>
       ))}
     </div>
